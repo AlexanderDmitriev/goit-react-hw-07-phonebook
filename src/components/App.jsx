@@ -7,6 +7,7 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/ContactFilter';
 import { useSelector, useDispatch } from 'react-redux';
 import {saveContact,filterContacts,deleteContact} from '../redux/store';
+/* import {useGetAllContacts,useGetContactByName} from '../redux/contacts'; */
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,9 @@ export const App = () => {
   const getFilter = state => state.contacts.filter;
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
+
+  /* const { data, error, isLoading } = useGetContactByName('Terry');
+  console.log(data); */
 
   useEffect(() => {
     window.localStorage.setItem('contacts', JSON.stringify(contacts));
