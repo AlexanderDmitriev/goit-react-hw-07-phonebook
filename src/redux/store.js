@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { phoneBookApi } from './contacts';
 
 const initialState = {
   phoneBook: JSON.parse(window.localStorage.getItem('contacts')) ?? [
@@ -30,7 +31,14 @@ const phoneBookSlice = createSlice({
 });
 
 export const store = configureStore({
-  reducer: { contacts: phoneBookSlice.reducer },
+  reducer: {
+    contacts: phoneBookSlice.reducer,
+    [phoneBookApi.reducerPath]: phoneBookApi.reducer,
+  },
+  middleware: getDefaultMiddleware => [
+    ...getDefaultMiddleware(),
+    phoneBookApi.middleware,
+  ],
 });
 
 export const { saveContact, deleteContact, filterContacts } =

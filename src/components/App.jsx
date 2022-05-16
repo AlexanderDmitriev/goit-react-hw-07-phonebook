@@ -6,7 +6,7 @@ import { Title, Container } from './App.styled';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/ContactFilter';
 import { useSelector, useDispatch } from 'react-redux';
-import {saveContact,filterContacts,deleteContact} from '../redux/store'
+import {saveContact,filterContacts,deleteContact} from '../redux/store';
 
 export const App = () => {
   const dispatch = useDispatch();
