@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 import { ContactForm } from './AddingContactForm/AddingContactForm';
@@ -7,7 +7,7 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/ContactFilter';
 import { useSelector, useDispatch } from 'react-redux';
 import {saveContact,filterContacts,deleteContact} from '../redux/store';
-/* import {useGetAllContacts,useGetContactByName} from '../redux/contacts'; */
+import {useGetAllContacts/* ,useGetContactByName */} from '../redux/contacts';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -16,8 +16,11 @@ export const App = () => {
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
 
-  /* const { data, error, isLoading } = useGetContactByName('Terry');
-  console.log(data); */
+  /* const [x, setX] = useState(''); */
+  //const { data, error, isLoading } = useGetAllContacts();
+
+  //setX(data);
+  //console.log(useGetAllContacts);
 
   useEffect(() => {
     window.localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -46,7 +49,6 @@ export const App = () => {
 
   const deleteContactById = contactId => {
     dispatch(deleteContact(contactId));
-    //setContacts(prevState => prevState.filter(data => data.id !== contactId));
   };
 
   const changeFilter = event => {

@@ -32,7 +32,7 @@ const phoneBookSlice = createSlice({
 
 export const store = configureStore({
   reducer: {
-    contacts: phoneBookSlice.reducer,
+     contacts: phoneBookSlice.reducer, 
     [phoneBookApi.reducerPath]: phoneBookApi.reducer,
   },
   middleware: getDefaultMiddleware => [
