@@ -6,7 +6,7 @@ export const ContactList = ({ contacts, onDeleteContact }) => {
     <ul>
       {contacts.map(data => (
         <ContactListItem key={nanoid()}>
-          {data.name} - {data.number}
+          {data.name} - {data.phone}
           <DeleteButton
             type="button"
             onClick={() => {
