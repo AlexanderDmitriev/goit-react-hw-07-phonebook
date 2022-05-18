@@ -19,15 +19,15 @@ export const phoneBookApi = createApi({
           name:name,
           phone:number,
         },
-        invalidatesTags: ['Contacts'],
-      }),
+        
+      }),invalidatesTags: ['Contacts'],
     }),
     deleteContact: builder.mutation({
       query: contactId => ({
         url: `/contacts/${contactId}`,
         method: 'DELETE',
-        invalidatesTags: ['Contacts'],
-      }),
+       
+      }), invalidatesTags: ['Contacts'],
     }),
   }),
 });
