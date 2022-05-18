@@ -1,25 +1,33 @@
 import React from 'react';
-import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 import { ContactForm } from './AddingContactForm/AddingContactForm';
 import { Title, Container } from './App.styled';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/ContactFilter';
 import { useSelector, useDispatch } from 'react-redux';
-import {saveContact,filterContacts,deleteContact} from '../redux/store';
-import {useGetAllContactsQuery} from '../redux/contacts';
+import { filterContacts } from '../redux/store';
+import {
+  useGetAllContactsQuery,
+  useDeleteContactMutation,
+  useAddContactMutation,
+} from '../redux/contacts';
 
 export const App = () => {
   const dispatch = useDispatch();
   const getFilter = state => state.contacts.filter;
-  const getContacts = state => state.contacts.phoneBook;
-  const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
 
-  const { data:contacts2, error, isLoading,isFetching } = useGetAllContactsQuery();
+  const {
+    data: contacts,
+    /* error,
+    isLoading, */
+    isFetching,
+  } = useGetAllContactsQuery();
+  const [createContact, /* { isSuccess } */] = useAddContactMutation();
+  const [deleteContact, /* { isUpdating } */] = useDeleteContactMutation();
 
   //Проверка пришли ли данные с сервера
-  const showContacts=contacts2&&!isFetching;
+  const showContacts = contacts && !isFetching;
 
   const contactAntiDuplicator = name => {
     const normalizedName = name.toLowerCase();
@@ -29,31 +37,22 @@ export const App = () => {
   };
 
   const addContact = ({ name, number }) => {
-    const newContact = {
-      id: nanoid(),
-      name: name,
-      number: number,
-    };
-    if (contactAntiDuplicator(newContact.name)) {
-      window.alert(`${newContact.name} is already in contacts`);
+    if (contactAntiDuplicator(name)) {
+      window.alert(`${name} is already in contacts`);
       return;
     } else {
-      dispatch(saveContact(newContact));
+      createContact({ name, number });
     }
-  };
-
-  const deleteContactById = contactId => {
-    dispatch(deleteContact(contactId));
   };
 
   const changeFilter = event => {
     dispatch(filterContacts(event.currentTarget.value));
   };
 
-  const normalizedFilter = filter.toLowerCase();
+  /* const normalizedFilter = filter.toLowerCase();
   const visibleContacts = contacts.filter(data =>
     data.name.toLowerCase().includes(normalizedFilter)
-  );
+  ); */
 
   return (
     <Container>
@@ -61,8 +60,9 @@ export const App = () => {
       <ContactForm onSubmit={addContact} />
       <Title>Contacts</Title>
       <Filter filterValue={filter} onChange={changeFilter} />
-      {showContacts&&<ContactList contacts={contacts2} onDeleteContact={deleteContactById} />}
-      
+      {showContacts && (
+        <ContactList contacts={contacts} onDeleteContact={deleteContact} />
+      )}
     </Container>
   );
 };
