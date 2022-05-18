@@ -2,7 +2,6 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { phoneBookApi } from './contacts';
 
 const initialState = {
-  phoneBook: [],
   filter: '',
 };
 
