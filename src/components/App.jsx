@@ -14,8 +14,7 @@ import {
 
 export const App = () => {
   const dispatch = useDispatch();
-  const getFilter = state => state.contacts.filter;
-  const filter = useSelector(getFilter);
+  const filterContact = useSelector(state => state.filter.value);
 
   const {
     data: contacts,
@@ -23,8 +22,8 @@ export const App = () => {
     isLoading, */
     isFetching,
   } = useGetAllContactsQuery();
-  const [createContact, /* { isSuccess } */] = useAddContactMutation();
-  const [deleteContact, /* { isUpdating } */] = useDeleteContactMutation();
+  const [createContact /* { isSuccess } */] = useAddContactMutation();
+  const [deleteContact /* { isUpdating } */] = useDeleteContactMutation();
 
   //Проверка пришли ли данные с сервера
   const showContacts = contacts && !isFetching;
@@ -49,20 +48,25 @@ export const App = () => {
     dispatch(filterContacts(event.currentTarget.value));
   };
 
-   const normalizedFilter = filter.toLowerCase();
-  
-  const visibleContacts = contacts.filter(data =>
-    data.name.toLowerCase().includes(normalizedFilter)
-  ); 
+  let visibleContacts = [];
+  const normalizedFilter = filterContact.toLowerCase();
+  if (showContacts) {
+    visibleContacts = contacts.filter(data =>
+      data.name.toLowerCase().includes(normalizedFilter)
+    );
+}
 
   return (
     <Container>
       <Title>Phonebook</Title>
       <ContactForm onSubmit={addContact} />
       <Title>Contacts</Title>
-      <Filter filterValue={filter} onChange={changeFilter} />
+      <Filter filterValue={filterContact} onChange={changeFilter} />
       {showContacts && (
-        <ContactList contacts={visibleContacts} onDeleteContact={deleteContact} />
+        <ContactList
+          contacts={visibleContacts}
+          onDeleteContact={deleteContact}
+        />
       )}
     </Container>
   );
