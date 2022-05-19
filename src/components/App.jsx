@@ -5,7 +5,7 @@ import { Title, Container } from './App.styled';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/ContactFilter';
 import { useSelector, useDispatch } from 'react-redux';
-import { filterContacts } from '../redux/store';
+import { filterContacts } from '../redux/filter';
 import {
   useGetAllContactsQuery,
   useDeleteContactMutation,
@@ -49,10 +49,11 @@ export const App = () => {
     dispatch(filterContacts(event.currentTarget.value));
   };
 
-  /* const normalizedFilter = filter.toLowerCase();
+   const normalizedFilter = filter.toLowerCase();
+  
   const visibleContacts = contacts.filter(data =>
     data.name.toLowerCase().includes(normalizedFilter)
-  ); */
+  ); 
 
   return (
     <Container>
@@ -61,7 +62,7 @@ export const App = () => {
       <Title>Contacts</Title>
       <Filter filterValue={filter} onChange={changeFilter} />
       {showContacts && (
-        <ContactList contacts={contacts} onDeleteContact={deleteContact} />
+        <ContactList contacts={visibleContacts} onDeleteContact={deleteContact} />
       )}
     </Container>
   );

@@ -1,24 +1,11 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { phoneBookApi } from './contacts';
-
-const initialState = {
-  filter: '',
-};
-
-const phoneBookSlice = createSlice({
-  name: 'contacts',
-  initialState,
-  reducers: {
-    filterContacts(state, action) {
-      state.filter = action.payload;
-    },
-  },
-});
+import {filterSlice} from './filter';
 
 export const store = configureStore({
   reducer: {
-     contacts: phoneBookSlice.reducer, 
     [phoneBookApi.reducerPath]: phoneBookApi.reducer,
+    [filterSlice.name]: filterSlice.reducer,
   },
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware(),
@@ -26,5 +13,3 @@ export const store = configureStore({
   ],
 });
 
-export const { filterContacts } =
-  phoneBookSlice.actions;
