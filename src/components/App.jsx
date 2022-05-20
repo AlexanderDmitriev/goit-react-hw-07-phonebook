@@ -11,22 +11,22 @@ import {
   useDeleteContactMutation,
   useAddContactMutation,
 } from '../redux/contacts';
+import { Spinner } from './App.styled';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const App = () => {
   const dispatch = useDispatch();
   const filterContact = useSelector(state => state.filter.value);
 
-  const {
-    data: contacts,
-    /* error,
-    isLoading, */
-    isFetching,
-  } = useGetAllContactsQuery();
-  const [createContact /* { isSuccess } */] = useAddContactMutation();
-  const [deleteContact /* { isUpdating } */] = useDeleteContactMutation();
+  const { data: contacts, error, isFetching } = useGetAllContactsQuery();
+  const [createContact, isSuccess] = useAddContactMutation();
+  const [deleteContact] = useDeleteContactMutation();
 
   //Проверка пришли ли данные с сервера
   const showContacts = contacts && !isFetching;
+  //Сообщение при отсутствии данных с сервера
+  const errorMessage =
+    'Sorry, no data found. Try reloading the page or try later';
 
   const contactAntiDuplicator = name => {
     const normalizedName = name.toLowerCase();
@@ -37,10 +37,13 @@ export const App = () => {
 
   const addContact = ({ name, number }) => {
     if (contactAntiDuplicator(name)) {
-      window.alert(`${name} is already in contacts`);
+      toast.error(`${name} is already in contacts`);
       return;
     } else {
       createContact({ name, number });
+      if (isSuccess) {
+        toast.success(`${name} successfully adding in the phone book`);
+      }
     }
   };
 
@@ -54,7 +57,7 @@ export const App = () => {
     visibleContacts = contacts.filter(data =>
       data.name.toLowerCase().includes(normalizedFilter)
     );
-}
+  }
 
   return (
     <Container>
@@ -62,12 +65,15 @@ export const App = () => {
       <ContactForm onSubmit={addContact} />
       <Title>Contacts</Title>
       <Filter filterValue={filterContact} onChange={changeFilter} />
+      {isFetching && <Spinner size={50} color="rgba(57, 62, 172, 1)" />}
       {showContacts && (
         <ContactList
           contacts={visibleContacts}
           onDeleteContact={deleteContact}
         />
       )}
+      {error && <Title>{errorMessage}</Title>}
+      <Toaster position="top-right" reverseOrder={false} />
     </Container>
   );
 };

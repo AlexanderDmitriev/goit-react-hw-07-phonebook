@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { SpinnerDiamond } from 'spinners-react';
 
 export const Title = styled.h2`
   font-family: Raleway, sans-serif;
@@ -35,4 +36,8 @@ export const InputOnContactForm = styled.input`
 `;
 export const Container = styled.section`
   padding: ${props => props.theme.spacing(5)};
+`;
+
+export const Spinner = styled(SpinnerDiamond)`
+  margin-left: ${props => props.theme.spacing(15)};
 `;
